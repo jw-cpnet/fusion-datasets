@@ -12,6 +12,9 @@ repository = "https://github.com/jw-cpnet/fusion-datasets"
 
 [tool.poetry.dependencies]  # https://python-poetry.org/docs/dependency-specification/
 python = ">=3.10,<4.0"
+pandas = ">2.0.0"
+kedro-datasets = ">=2.0.0"
+clickhouse-connect = ">=0.6.23"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }
