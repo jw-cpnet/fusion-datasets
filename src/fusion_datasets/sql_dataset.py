@@ -142,6 +142,7 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
             if "{port}" in connection_str:
                 connection_str = connection_str.format(port=local_port)
             connection_str = self._encode_url_query(connection_str)
+            self._connection_str = connection_str
 
         super().create_connection(connection_str)
 
