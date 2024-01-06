@@ -17,6 +17,7 @@ kedro-datasets = ">=2.0.0"
 clickhouse-connect = ">=0.6.23"
 sshtunnel = "^0.4.0"
 pyodbc = "^5.0.1"
+sqlalchemy = "^2.0.25"
 
 [tool.poetry.group.test.dependencies]  # https://python-poetry.org/docs/master/managing-dependencies/
 coverage = { extras = ["toml"], version = ">=7.2.5" }
