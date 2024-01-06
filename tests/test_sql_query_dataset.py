@@ -46,7 +46,7 @@ def sql_query_dataset(sql_query, ssh_credentials, connection_str):
 
 @pytest.fixture
 def sql_query_dataset_without_ssh(sql_query, connection_str):
-    return OriginalSQLQueryDataset(
+    return SQLQueryDataset(
         sql=sql_query,
         credentials={"con": connection_str},
     )
