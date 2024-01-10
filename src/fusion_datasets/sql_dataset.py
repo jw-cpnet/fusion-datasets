@@ -1,9 +1,13 @@
+import copy
 import re
+from pathlib import PurePosixPath
 from typing import Union, Tuple, List, Any
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 
 import clickhouse_connect
 import pandas as pd
+from jinja2 import Environment, meta
+from kedro.io.core import get_filepath_str
 from kedro_datasets.pandas.sql_dataset import SQLQueryDataset as OriginalSQLQueryDataset
 from kedro_datasets.pandas.sql_dataset import SQLTableDataset as OriginalSQLTableDataset
 from sshtunnel import SSHTunnelForwarder
@@ -62,6 +66,7 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
         sql: str = None,
         credentials: dict[str, Any] = None,
         ssh_credentials: dict[str, Any] | None = None,
+        tag_names: List[str] | None = None,
         load_args: dict[str, Any] = None,
         fs_args: dict[str, Any] = None,
         filepath: str = None,
@@ -79,6 +84,14 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
         )
         self._ssh_credentials = ssh_credentials
         self._ssh_tunnel = None
+        self._tag_names = tag_names
+
+    @staticmethod
+    def _is_jinja2_template(s):
+        env = Environment()
+        ast = env.parse(s)
+        variables = meta.find_undeclared_variables(ast)
+        return bool(variables)
 
     @staticmethod
     def _encode_url_query(url):
@@ -146,9 +159,35 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
 
         super().create_connection(connection_str)
 
+    def _render_sql_template(self, sql_template):
+        if self._tag_names:
+            env = Environment()
+            context = {"tag_names": self._tag_names}
+            sql = env.from_string(sql_template).render(**context)
+        else:
+            raise ValueError(
+                "The SQL query is a Jinja2 template, but no tag names were provided."
+            )
+        return sql
+
     def _load(self) -> pd.DataFrame:
         try:
-            return super()._load()
+            load_args = copy.deepcopy(self._load_args)
+
+            if self._filepath:
+                load_path = get_filepath_str(
+                    PurePosixPath(self._filepath), self._protocol
+                )
+                with self._fs.open(load_path, mode="r") as fs_file:
+                    load_args["sql"] = fs_file.read()
+
+            if self._is_jinja2_template(load_args["sql"]):
+                load_args["sql"] = self._render_sql_template(load_args["sql"])
+
+            return pd.read_sql_query(
+                con=self.engine.execution_options(**self._execution_options),
+                **load_args,
+            )
         finally:
             if self._ssh_tunnel:
                 self._ssh_tunnel.stop()

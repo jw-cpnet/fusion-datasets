@@ -31,24 +31,33 @@ def connection_str():
 
 
 @pytest.fixture
-def sql_query():
-    return "SELECT * FROM table"
+def tag_names():
+    return ["tag1", "tag2"]
 
 
 @pytest.fixture
-def sql_query_dataset(sql_query, ssh_credentials, connection_str):
+def sql_query():
+    return """SELECT
+    {% for tn in tag_names -%}
+    '{{ tn }}'{% if not loop.last %},{% endif %}
+    {% endfor -%}
+    FROM table"""
+
+
+@pytest.fixture
+def sql_query_dataset(sql_query, ssh_credentials, connection_str, tag_names):
     return SQLQueryDataset(
         sql=sql_query,
         credentials={"con": connection_str},
         ssh_credentials=ssh_credentials,
+        tag_names=tag_names,
     )
 
 
 @pytest.fixture
-def sql_query_dataset_without_ssh(sql_query, connection_str):
+def sql_query_dataset_without_ssh(sql_query, connection_str, tag_names):
     return SQLQueryDataset(
-        sql=sql_query,
-        credentials={"con": connection_str},
+        sql=sql_query, credentials={"con": connection_str}, tag_names=tag_names
     )
 
 
@@ -90,3 +99,14 @@ def test_load_with_ssh(sql_query_dataset):
         sql_query_dataset.load()
         mock_ssh_tunnel_start.assert_called_once()
         mock_ssh_tunnel_stop.assert_called_once()
+
+
+def test_render_sql_template(sql_query_dataset):
+    expected_sql = """SELECT
+    'tag1',
+    'tag2'
+    FROM table"""
+    rendered_sql = sql_query_dataset._render_sql_template(
+        sql_query_dataset._load_args["sql"]
+    )
+    assert rendered_sql == expected_sql
