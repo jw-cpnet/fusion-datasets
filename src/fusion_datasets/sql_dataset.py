@@ -66,7 +66,7 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
         sql: str = None,
         credentials: dict[str, Any] = None,
         ssh_credentials: dict[str, Any] | None = None,
-        tag_names: List[str] | None = None,
+        j2_context: dict[str, Any] | None = None,
         load_args: dict[str, Any] = None,
         fs_args: dict[str, Any] = None,
         filepath: str = None,
@@ -84,7 +84,7 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
         )
         self._ssh_credentials = ssh_credentials
         self._ssh_tunnel = None
-        self._tag_names = tag_names
+        self._j2_context = j2_context
 
     @staticmethod
     def _is_jinja2_template(s):
@@ -160,13 +160,13 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
         super().create_connection(connection_str)
 
     def _render_sql_template(self, sql_template):
-        if self._tag_names:
+        if self._j2_context:
             env = Environment()
-            context = {"tag_names": self._tag_names}
+            context = self._j2_context
             sql = env.from_string(sql_template).render(**context)
         else:
             raise ValueError(
-                "The SQL query is a Jinja2 template, but no tag names were provided."
+                "The SQL query is a Jinja2 template, but no context was provided."
             )
         return sql
 

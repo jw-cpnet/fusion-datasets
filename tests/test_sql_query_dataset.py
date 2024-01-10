@@ -31,8 +31,8 @@ def connection_str():
 
 
 @pytest.fixture
-def tag_names():
-    return ["tag1", "tag2"]
+def j2_context():
+    return {"tag_names": ["tag1", "tag2"]}
 
 
 @pytest.fixture
@@ -45,20 +45,18 @@ def sql_query():
 
 
 @pytest.fixture
-def sql_query_dataset(sql_query, ssh_credentials, connection_str, tag_names):
+def sql_query_dataset(sql_query, ssh_credentials, connection_str, j2_context):
     return SQLQueryDataset(
         sql=sql_query,
         credentials={"con": connection_str},
         ssh_credentials=ssh_credentials,
-        tag_names=tag_names,
+        j2_context=j2_context,
     )
 
 
 @pytest.fixture
-def sql_query_dataset_without_ssh(sql_query, connection_str, tag_names):
-    return SQLQueryDataset(
-        sql=sql_query, credentials={"con": connection_str}, tag_names=tag_names
-    )
+def sql_query_dataset_without_ssh(sql_query, connection_str, j2_context):
+    return SQLQueryDataset(sql=sql_query, credentials={"con": connection_str})
 
 
 def test_create_connection_without_ssh(sql_query_dataset_without_ssh, connection_str):
@@ -110,3 +108,10 @@ def test_render_sql_template(sql_query_dataset):
         sql_query_dataset._load_args["sql"]
     )
     assert rendered_sql == expected_sql
+
+
+def test_raise_value_error_if_no_context(sql_query_dataset_without_ssh):
+    with pytest.raises(ValueError):
+        sql_query_dataset_without_ssh._render_sql_template(
+            sql_query_dataset_without_ssh._load_args["sql"]
+        )
