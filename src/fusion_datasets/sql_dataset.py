@@ -5,6 +5,7 @@ from typing import Union, Tuple, List, Any
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 
 import clickhouse_connect
+import numpy as np
 import pandas as pd
 from jinja2 import Environment, meta
 from kedro.io.core import get_filepath_str
@@ -55,7 +56,9 @@ class SQLTableDataset(OriginalSQLTableDataset):
                     for sql in data:
                         client.command(sql)
                 case _:
-                    client.insert_df(self._save_args["name"], data)
+                    client.insert_df(
+                        self._save_args["name"], data.replace({np.nan: None})
+                    )
         else:
             data.to_sql(con=self.engine, **self._save_args)
 
