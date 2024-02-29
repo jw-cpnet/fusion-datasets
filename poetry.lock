@@ -1662,21 +1662,21 @@ test = ["Jinja2 (<3.1.0)", "bandit (>=1.6.2,<2.0)", "behave (==1.2.6)", "black (
 
 [[package]]
 name = "kedro-datasets"
-version = "2.0.0"
+version = "2.1.0"
 description = "Kedro-Datasets is where you can find all of Kedro's data connectors."
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "kedro-datasets-2.0.0.tar.gz", hash = "sha256:c2a492c73ac7992a0d04741a0d3dbb7a14c99fe821745561bf33f136d9f181e6"},
-    {file = "kedro_datasets-2.0.0-py3-none-any.whl", hash = "sha256:f04715a44cb3161d3439b2de0436dd15866af0cdb794fead33a003d3bf6f0b55"},
+    {file = "kedro-datasets-2.1.0.tar.gz", hash = "sha256:a1fc515e50cae30a9ef1c64585a08319965bb839a1c96fa1f6748739376af282"},
+    {file = "kedro_datasets-2.1.0-py3-none-any.whl", hash = "sha256:6a4aa94bd452852942ac8ee704d82bec01bce50d2729870f541fe4ef0a5dd1b5"},
 ]
 
 [package.dependencies]
-kedro = ">=0.16"
+kedro = ">=0.19"
 lazy-loader = "*"
 
 [package.extras]
-all = ["Pillow (>=9.0,<10.0)", "PyYAML (>=4.2,<7.0)", "SQLAlchemy (>=1.4,<3.0)", "biopython (>=1.73,<2.0)", "compress-pickle[lz4] (>=2.1.0,<2.2.0)", "dask[complete] (>=2021.10)", "datasets", "delta-spark (>=1.0,<3.0)", "delta-spark (>=1.2.1,<1.3.0)", "deltalake (>=0.10.0)", "deltalake (>=0.6.2)", "geopandas (>=0.6.0,<1.0)", "hdfs (>=2.5.8,<3.0)", "holoviews (>=1.13.0,<1.14.0)", "huggingface-hub", "lxml (>=4.6,<5.0)", "matplotlib (>=3.0.3,<4.0)", "networkx (>=2.4,<3.0)", "opencv-python (>=4.5.5.64,<4.6.0.0)", "openpyxl (>=3.0.6,<4.0)", "pandas (>=1.3,<3.0)", "pandas-gbq (>=0.12.0,<0.18.0)", "pandas-gbq (>=0.18.0)", "plotly (>=4.8.0,<6.0)", "polars (>=0.18.0)", "pyarrow (>=4.0)", "pyarrow (>=6.0)", "pyarrow (>=8.0,<9.0)", "pyodbc (>=4.0,<5.0)", "pyproj (>=3.0,<4.0)", "pyspark (>=2.2,<4.0)", "redis (>=4.1,<5.0)", "requests (>=2.20,<3.0)", "s3fs (>=2021.4,<2024.1)", "scikit-learn (>=1.0.2)", "scipy (>=1.7.3,<1.8.0)", "snowflake-snowpark-python (>=1.0,<2.0)", "tables (>=3.6,<4.0)", "tables (>=3.6.0,<3.7.0)", "tensorflow (>=2.0,<3.0)", "tensorflow-macos (>=2.0,<3.0)", "transformers", "triad (>=0.6.7,<1.0)", "xlsx2csv (>=0.8.0)"]
+all = ["Pillow (>=9.0,<10.0)", "PyYAML (>=4.2,<7.0)", "SQLAlchemy (>=1.4,<3.0)", "biopython (>=1.73,<2.0)", "compress-pickle[lz4] (>=2.1.0,<2.2.0)", "dask[complete] (>=2021.10)", "datasets", "delta-spark (>=1.0,<3.0)", "delta-spark (>=1.2.1,<1.3.0)", "deltalake (>=0.10.0)", "deltalake (>=0.6.2)", "geopandas (>=0.6.0,<1.0)", "hdfs (>=2.5.8,<3.0)", "holoviews (>=1.13.0,<1.14.0)", "huggingface-hub", "lxml (>=4.6,<5.0)", "matplotlib (>=3.0.3,<4.0)", "networkx (>=2.4,<3.0)", "opencv-python (>=4.5.5.64,<4.6.0.0)", "openpyxl (>=3.0.6,<4.0)", "pandas (>=1.3,<3.0)", "pandas-gbq (>=0.12.0,<0.18.0)", "pandas-gbq (>=0.18.0)", "plotly (>=4.8.0,<6.0)", "polars (>=0.18.0)", "pyarrow (>=4.0)", "pyarrow (>=6.0)", "pyodbc (>=4.0,<5.0)", "pyproj (>=3.0,<4.0)", "pyspark (>=2.2,<4.0)", "redis (>=4.1,<5.0)", "requests (>=2.20,<3.0)", "s3fs (>=2021.4,<2024.1)", "scikit-learn (>=1.0.2)", "scipy", "scipy (>=1.7.3,<1.8.0)", "snowflake-snowpark-python (>=1.0,<2.0)", "tables (>=3.6,<4.0)", "tensorflow (>=2.0,<3.0)", "tensorflow-macos (>=2.0,<3.0)", "transformers", "triad (>=0.6.7,<1.0)", "xlsx2csv (>=0.8.0)"]
 api = ["requests (>=2.20,<3.0)"]
 api-apidataset = ["requests (>=2.20,<3.0)"]
 biosequence = ["biopython (>=1.73,<2.0)"]
@@ -1691,11 +1691,12 @@ geopandas-geojsondataset = ["geopandas (>=0.6.0,<1.0)", "pyproj (>=3.0,<4.0)"]
 holoviews = ["holoviews (>=1.13.0,<1.14.0)"]
 holoviews-holoviewswriter = ["holoviews (>=1.13.0,<1.14.0)"]
 huggingface = ["datasets", "huggingface-hub", "transformers"]
+matlab = ["scipy"]
 matplotlib = ["matplotlib (>=3.0.3,<4.0)"]
 matplotlib-matplotlibwriter = ["matplotlib (>=3.0.3,<4.0)"]
 networkx = ["networkx (>=2.4,<3.0)"]
 networkx-networkxdataset = ["networkx (>=2.4,<3.0)"]
-pandas = ["SQLAlchemy (>=1.4,<3.0)", "deltalake (>=0.10.0)", "lxml (>=4.6,<5.0)", "openpyxl (>=3.0.6,<4.0)", "pandas (>=1.3,<3.0)", "pandas-gbq (>=0.12.0,<0.18.0)", "pandas-gbq (>=0.18.0)", "pyarrow (>=6.0)", "pyodbc (>=4.0,<5.0)", "tables (>=3.6,<4.0)", "tables (>=3.6.0,<3.7.0)"]
+pandas = ["SQLAlchemy (>=1.4,<3.0)", "deltalake (>=0.10.0)", "lxml (>=4.6,<5.0)", "openpyxl (>=3.0.6,<4.0)", "pandas (>=1.3,<3.0)", "pandas-gbq (>=0.12.0,<0.18.0)", "pandas-gbq (>=0.18.0)", "pyarrow (>=6.0)", "pyodbc (>=4.0,<5.0)", "tables (>=3.6,<4.0)"]
 pandas-csvdataset = ["pandas (>=1.3,<3.0)"]
 pandas-deltatabledataset = ["deltalake (>=0.10.0)", "pandas (>=1.3,<3.0)"]
 pandas-exceldataset = ["openpyxl (>=3.0.6,<4.0)", "pandas (>=1.3,<3.0)"]
@@ -1703,7 +1704,7 @@ pandas-featherdataset = ["pandas (>=1.3,<3.0)"]
 pandas-gbqquerydataset = ["pandas (>=1.3,<3.0)", "pandas-gbq (>=0.12.0,<0.18.0)", "pandas-gbq (>=0.18.0)"]
 pandas-gbqtabledataset = ["pandas (>=1.3,<3.0)", "pandas-gbq (>=0.12.0,<0.18.0)", "pandas-gbq (>=0.18.0)"]
 pandas-genericdataset = ["pandas (>=1.3,<3.0)"]
-pandas-hdfdataset = ["pandas (>=1.3,<3.0)", "tables (>=3.6,<4.0)", "tables (>=3.6.0,<3.7.0)"]
+pandas-hdfdataset = ["pandas (>=1.3,<3.0)", "tables (>=3.6,<4.0)"]
 pandas-jsondataset = ["pandas (>=1.3,<3.0)"]
 pandas-parquetdataset = ["pandas (>=1.3,<3.0)", "pyarrow (>=6.0)"]
 pandas-sqlquerydataset = ["SQLAlchemy (>=1.4,<3.0)", "pandas (>=1.3,<3.0)", "pyodbc (>=4.0,<5.0)"]
@@ -1719,10 +1720,11 @@ plotly-plotlydataset = ["pandas (>=1.3,<3.0)", "plotly (>=4.8.0,<6.0)"]
 polars = ["deltalake (>=0.6.2)", "polars (>=0.18.0)", "pyarrow (>=4.0)", "xlsx2csv (>=0.8.0)"]
 polars-csvdataset = ["polars (>=0.18.0)"]
 polars-eagerpolarsdataset = ["deltalake (>=0.6.2)", "polars (>=0.18.0)", "pyarrow (>=4.0)", "xlsx2csv (>=0.8.0)"]
+polars-genericdataset = ["deltalake (>=0.6.2)", "polars (>=0.18.0)", "pyarrow (>=4.0)", "xlsx2csv (>=0.8.0)"]
 polars-lazypolarsdataset = ["deltalake (>=0.6.2)", "polars (>=0.18.0)", "pyarrow (>=4.0)"]
 redis = ["redis (>=4.1,<5.0)"]
-snowflake = ["pyarrow (>=8.0,<9.0)", "snowflake-snowpark-python (>=1.0,<2.0)"]
-snowflake-snowparktabledataset = ["pyarrow (>=8.0,<9.0)", "snowflake-snowpark-python (>=1.0,<2.0)"]
+snowflake = ["snowflake-snowpark-python (>=1.0,<2.0)"]
+snowflake-snowparktabledataset = ["snowflake-snowpark-python (>=1.0,<2.0)"]
 spark = ["delta-spark (>=1.0,<3.0)", "hdfs (>=2.5.8,<3.0)", "pyspark (>=2.2,<4.0)", "s3fs (>=2021.4,<2024.1)"]
 spark-deltatabledataset = ["delta-spark (>=1.0,<3.0)", "hdfs (>=2.5.8,<3.0)", "pyspark (>=2.2,<4.0)", "s3fs (>=2021.4,<2024.1)"]
 spark-sparkdataset = ["hdfs (>=2.5.8,<3.0)", "pyspark (>=2.2,<4.0)", "s3fs (>=2021.4,<2024.1)"]
@@ -1732,7 +1734,7 @@ svmlight = ["scikit-learn (>=1.0.2)", "scipy (>=1.7.3,<1.8.0)"]
 svmlight-svmlightdataset = ["scikit-learn (>=1.0.2)", "scipy (>=1.7.3,<1.8.0)"]
 tensorflow = ["tensorflow (>=2.0,<3.0)", "tensorflow-macos (>=2.0,<3.0)"]
 tensorflow-tensorflowmodeldataset = ["tensorflow (>=2.0,<3.0)", "tensorflow-macos (>=2.0,<3.0)"]
-test = ["Jinja2 (<3.1.0)", "Pillow (>=9.0,<10.0)", "SQLAlchemy (>=1.2,<2.0)", "adlfs (>=2023.1,<2024.0)", "bandit (>=1.6.2,<2.0)", "behave (==1.2.6)", "biopython (>=1.73,<2.0)", "black (>=22.0,<23.0)", "blacken-docs (==1.9.2)", "cloudpickle (<=2.0.0)", "compress-pickle[lz4] (>=2.1.0,<2.2.0)", "coverage[toml]", "dask[complete] (>=2021.10,<2022.0)", "datasets", "delta-spark (>=1.2.1)", "delta-spark (>=1.2.1,<1.3.0)", "deltalake (>=0.10.0)", "dill (>=0.3.1,<0.4.0)", "filelock (>=3.4.0,<4.0)", "gcsfs (>=2023.1,<2023.3)", "geopandas (>=0.6.0,<1.0)", "hdfs (>=2.5.8,<3.0)", "holoviews (>=1.13.0)", "huggingface-hub", "import-linter[toml] (==1.2.6)", "ipython (>=7.31.1,<8.0)", "joblib (>=0.14)", "jupyter (>=1.0,<2.0)", "jupyterlab (>=3.0,<4.0)", "lxml (>=4.6,<5.0)", "matplotlib (>=3.0.3,<3.4)", "matplotlib (>=3.5,<3.6)", "memory-profiler (>=0.50.0,<1.0)", "moto (==1.3.7)", "moto (==4.1.12)", "networkx (>=2.4,<3.0)", "opencv-python (>=4.5.5.64,<4.6.0.0)", "openpyxl (>=3.0.3,<4.0)", "packaging", "pandas (>=1.3,<2.0)", "pandas-gbq (>=0.12.0,<0.18.0)", "pandas-gbq (>=0.18.0)", "plotly (>=4.8.0,<6.0)", "polars[deltalake,xlsx2csv] (>=0.18.0,<0.19.0)", "pre-commit (>=2.9.2)", "pyarrow (>=1.0)", "pyarrow (>=7.0)", "pyodbc (>=4.0.35,<4.1.0)", "pyproj (>=3.0,<4.0)", "pyspark (>=2.2,<3.4)", "pyspark (>=3.4)", "pytest (>=7.2,<8.0)", "pytest-cov (>=3.0,<4.0)", "pytest-mock (>=1.7.1,<2.0)", "pytest-xdist[psutil] (>=2.2.1,<2.3.0)", "redis (>=4.1,<5.0)", "requests (>=2.20,<3.0)", "requests-mock (>=1.6,<2.0)", "ruff (>=0.0.290,<0.1.0)", "s3fs (>=2021.04,<2024.1)", "scikit-learn (>=1.0.2,<2)", "scipy (>=1.7.3)", "snowflake-snowpark-python (>=1.0,<2.0)", "tables (>=3.6,<4.0)", "tables (>=3.8.0,<3.9.0)", "tensorflow (>=2.0,<3.0)", "tensorflow-macos (>=2.0,<3.0)", "transformers", "triad (>=0.6.7,<1.0)", "trufflehog (>=2.1,<3.0)", "xlsxwriter (>=1.0,<2.0)"]
+test = ["Jinja2 (<3.1.0)", "Pillow (>=9.0,<10.0)", "SQLAlchemy (>=1.2,<2.0)", "adlfs (>=2023.1,<2024.0)", "bandit (>=1.6.2,<2.0)", "behave (==1.2.6)", "biopython (>=1.73,<2.0)", "black (>=22.0,<23.0)", "blacken-docs (==1.9.2)", "cloudpickle (<=2.0.0)", "compress-pickle[lz4] (>=2.1.0,<2.2.0)", "coverage[toml]", "dask[complete] (>=2021.10)", "datasets", "delta-spark (>=1.0,<3.0)", "deltalake (>=0.10.0,<0.15.2)", "dill (>=0.3.1,<0.4.0)", "filelock (>=3.4.0,<4.0)", "gcsfs (>=2023.1,<2023.3)", "geopandas (>=0.6.0,<1.0)", "hdfs (>=2.5.8,<3.0)", "holoviews (>=1.13.0)", "huggingface-hub", "import-linter[toml] (==1.2.6)", "ipython (>=7.31.1,<8.0)", "joblib (>=0.14)", "jupyter (>=1.0,<2.0)", "jupyterlab (>=3.0,<4.0)", "lxml (>=4.6,<5.0)", "matplotlib (>=3.0.3,<3.4)", "matplotlib (>=3.5,<3.6)", "memory-profiler (>=0.50.0,<1.0)", "moto (==5.0.0)", "networkx (>=2.4,<3.0)", "opencv-python (>=4.5.5.64,<4.6.0.0)", "openpyxl (>=3.0.3,<4.0)", "packaging", "pandas (>=1.3,<2.0)", "pandas-gbq (>=0.12.0,<0.18.0)", "pandas-gbq (>=0.18.0)", "plotly (>=4.8.0,<6.0)", "polars[deltalake,xlsx2csv] (>=0.18.0,<0.19.0)", "pre-commit (>=2.9.2)", "pyarrow (>=1.0)", "pyarrow (>=7.0)", "pyodbc (>=4.0.35,<4.1.0)", "pyproj (>=3.0,<4.0)", "pyspark (>=2.2,<3.4)", "pyspark (>=3.4)", "pytest (>=7.2,<8.0)", "pytest-cov (>=3.0,<4.0)", "pytest-mock (>=1.7.1,<2.0)", "pytest-xdist[psutil] (>=2.2.1,<2.3.0)", "redis (>=4.1,<5.0)", "requests (>=2.20,<3.0)", "requests-mock (>=1.6,<2.0)", "ruff (>=0.0.290,<0.1.0)", "s3fs (>=2021.04,<2024.1)", "scikit-learn (>=1.0.2,<2)", "scipy (>=1.7.3)", "snowflake-snowpark-python (>=1.0,<2.0)", "tables (>=3.6,<4.0)", "tables (>=3.8.0,<3.9.0)", "tensorflow (>=2.0,<3.0)", "tensorflow-macos (>=2.0,<3.0)", "transformers", "triad (>=0.6.7,<1.0)", "trufflehog (>=2.1,<3.0)", "xlsxwriter (>=1.0,<2.0)"]
 video = ["opencv-python (>=4.5.5.64,<4.6.0.0)"]
 video-videodataset = ["opencv-python (>=4.5.5.64,<4.6.0.0)"]
 yaml = ["PyYAML (>=4.2,<7.0)", "pandas (>=1.3,<3.0)"]
