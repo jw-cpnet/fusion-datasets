@@ -138,7 +138,7 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
 
         return encoded_url
 
-    def create_connection(self, connection_str: str) -> None:
+    def create_connection(self, connection_str: str, connection_args: dict) -> None:
         if self._ssh_credentials:
             ssh_credentials = self._ssh_credentials
             # Establish the SSH tunnel
@@ -160,7 +160,7 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
             connection_str = self._encode_url_query(connection_str)
             self._connection_str = connection_str
 
-        super().create_connection(connection_str)
+        super().create_connection(connection_str, connection_args)
 
     def _render_sql_template(self, sql_template):
         if self._j2_context:

@@ -63,8 +63,8 @@ def test_create_connection_without_ssh(sql_query_dataset_without_ssh, connection
     with patch.object(
         OriginalSQLQueryDataset, "create_connection"
     ) as mock_super_create_connection:
-        sql_query_dataset_without_ssh.create_connection(connection_str)
-        mock_super_create_connection.assert_called_once_with(connection_str)
+        sql_query_dataset_without_ssh.create_connection(connection_str, {})
+        mock_super_create_connection.assert_called_once_with(connection_str, {})
 
 
 def test_create_connection_with_ssh(sql_query_dataset, connection_str):
@@ -77,7 +77,7 @@ def test_create_connection_with_ssh(sql_query_dataset, connection_str):
     ):
         mock_local_bind_port.return_value = 12345
 
-        sql_query_dataset.create_connection(connection_str)
+        sql_query_dataset.create_connection(connection_str, {})
         mock_ssh_tunnel_start.assert_called_once()
 
 
