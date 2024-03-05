@@ -1,14 +1,14 @@
 import copy
 import re
 from pathlib import PurePosixPath
-from typing import Union, Tuple, List, Any
+from typing import Union, Tuple, List, Any, Dict, Optional
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 
 import clickhouse_connect
 import numpy as np
 import pandas as pd
 from jinja2 import Environment, meta
-from kedro.io.core import get_filepath_str
+from kedro.io.core import get_filepath_str, AbstractDataset
 from kedro_datasets.pandas.sql_dataset import SQLQueryDataset as OriginalSQLQueryDataset
 from kedro_datasets.pandas.sql_dataset import SQLTableDataset as OriginalSQLTableDataset
 from sshtunnel import SSHTunnelForwarder
@@ -195,3 +195,124 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
             if self._ssh_tunnel:
                 self._ssh_tunnel.stop()
                 self._ssh_tunnel = None
+
+
+class ClickHouseTablesDataset(AbstractDataset):
+    def __init__(
+        self,
+        credentials: Dict[str, Any],
+        order_by: str,
+        timezone: Optional[str] = None,
+        database: Optional[str] = None,
+        overwrite: Optional[bool] = False,
+    ) -> None:
+        if not (credentials and "host" in credentials and credentials["host"]):
+            raise ValueError(
+                "'host' argument cannot be empty. Please "
+                "provide a ClickHouse connection string."
+            )
+
+        self._database = database if database else "default"
+        self._order_by = order_by
+        self._timezone = timezone
+        self._credentials = credentials
+        self._overwrite = overwrite
+        self._client = clickhouse_connect.get_client(**credentials)
+
+    def _describe(self) -> Dict[str, Any]:
+        return {
+            "database": self._database,
+            "order_by": self._order_by,
+        }
+
+    def _load(self) -> Dict[str, pd.DataFrame]:
+        tables = self._client.query(f"SHOW TABLES FROM {self._database}").result_columns
+        if tables:
+            tables = tables[0]
+        data = {}
+        for table_name in tables:
+            df = self._client.query_df(f"SELECT * FROM {self._database}.{table_name}")
+            data[table_name] = df
+        return data
+
+    def _save(self, data: Dict[str, List[pd.DataFrame]]) -> None:
+        self._create_database_if_not_exists()
+        for table_name, dfs in data.items():
+            if self._overwrite and self._query_table_exists(table_name):
+                self._client.command(f"DROP TABLE {self._database}.{table_name}")
+            for i, df in enumerate(dfs):
+                self._create_or_alter_table(table_name, df, dfs)
+                self._client.insert_df(f"{self._database}.{table_name}", df)
+
+    def _exists(self) -> bool:
+        db = self._database
+        query_db = self._client.command(f"EXISTS DATABASE {db}")
+        query_table = self._client.query(f"show tables from {db}").result_rows
+        return query_db and len(query_table) > 0
+
+    def _query_table_exists(self, table_name: str) -> bool:
+        return self._client.command(f"EXISTS TABLE {self._database}.{table_name}")
+
+    def _create_database_if_not_exists(self) -> None:
+        self._client.command(f"CREATE DATABASE IF NOT EXISTS {self._database}")
+
+    def _get_merged_type(self, dataframes: List[pd.DataFrame], column: str) -> str:
+        """
+        Determines the most appropriate ClickHouse type for a given column across multiple dataframes.
+        """
+        # Concatenate the dataframes, then get its dtype
+        merged_df = pd.concat(
+            [df[[column]] for df in dataframes if column in df.columns],
+            ignore_index=True,
+        )
+        dtype = self._get_clickhouse_type(merged_df[column].dtype)
+        if column == self._order_by and "Nullable" in dtype:
+            dtype = dtype.replace("Nullable(", "").replace(")", "")
+
+        # Use the resulting dtype to get the ClickHouse type
+        return dtype
+
+    def _create_or_alter_table(
+        self, table_name: str, df: pd.DataFrame, dfs: List[pd.DataFrame]
+    ) -> None:
+        if not self._query_table_exists(table_name):
+            columns = ",\n".join(
+                [
+                    f"`{col}` {self._get_merged_type(dfs, col)}"
+                    for col in set(col for df in dfs for col in df.columns)
+                ]
+            )
+            create_table_sql = f"""
+            CREATE TABLE IF NOT EXISTS {self._database}.{table_name}
+            (
+                {columns}
+            )
+            ENGINE = MergeTree
+            ORDER BY `{self._order_by}`
+            """
+            self._client.command(create_table_sql)
+        else:
+            existing_columns = self._client.query_df(
+                f"DESCRIBE TABLE {self._database}.{table_name}"
+            ).name.tolist()
+            for col, dtype in df.dtypes.items():
+                if col not in existing_columns:
+                    alter_table_sql = (
+                        f"ALTER TABLE {self._database}.{table_name} "
+                        f"ADD COLUMN `{col}` {self._get_clickhouse_type(dtype)}"
+                    )
+                    self._client.command(alter_table_sql)
+
+    def _get_clickhouse_type(self, dtype) -> str:
+        if pd.api.types.is_integer_dtype(dtype):
+            return "Nullable(Int32)"
+        elif pd.api.types.is_float_dtype(dtype):
+            return "Nullable(Float64)"
+        elif pd.api.types.is_datetime64_any_dtype(dtype):
+            if self._timezone:
+                return f"DateTime('{self._timezone}')"
+            return f"DateTime"
+        elif pd.api.types.is_bool_dtype(dtype):
+            return "Nullable(UInt8)"
+        else:
+            return "Nullable(String)"
