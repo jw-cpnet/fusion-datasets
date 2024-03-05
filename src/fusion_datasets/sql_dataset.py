@@ -187,6 +187,8 @@ class SQLQueryDataset(OriginalSQLQueryDataset):
             if self._is_jinja2_template(load_args["sql"]):
                 load_args["sql"] = self._render_sql_template(load_args["sql"])
 
+            load_args["sql"] = load_args["sql"].rstrip().rstrip(";")
+
             return pd.read_sql_query(
                 con=self.engine.execution_options(**self._execution_options),
                 **load_args,
