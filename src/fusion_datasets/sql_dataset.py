@@ -1,20 +1,20 @@
 import copy
 import re
 from pathlib import PurePosixPath
-from typing import Union, Tuple, List, Any, Dict, Optional
-from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+from typing import Any, Dict, List, Optional, Tuple, Union
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 import clickhouse_connect
 import numpy as np
 import pandas as pd
 from jinja2 import Environment, meta
-from kedro.io.core import get_filepath_str, AbstractDataset
+from kedro.io.core import AbstractDataset, get_filepath_str
 from kedro_datasets.pandas.sql_dataset import SQLQueryDataset as OriginalSQLQueryDataset
 from kedro_datasets.pandas.sql_dataset import SQLTableDataset as OriginalSQLTableDataset
 from sshtunnel import SSHTunnelForwarder
 
 
-class SQLTableDataset(OriginalSQLTableDataset):
+class SQLTableDataset(OriginalSQLTableDataset):  # noqa: D101
     def _parse_connection_string(self):
         # Parse the connection string using urlparse
         parsed = urlparse(self._connection_str)
