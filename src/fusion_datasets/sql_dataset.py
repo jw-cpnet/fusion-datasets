@@ -50,10 +50,14 @@ class SQLTableDataset(OriginalSQLTableDataset):  # noqa: D101
             match data:
                 case str():
                     # used for creating one table
+                    if '{table_name}' in data:
+                        data = data.format(table_name=self._save_args["name"])
                     client.command(data)
                 case (tuple() | list()):
                     # used for creating multiple tables
                     for sql in data:
+                        if '{table_name}' in sql:
+                            sql = sql.format(table_name=self._save_args["name"])
                         client.command(sql)
                 case _:
                     client.insert_df(
